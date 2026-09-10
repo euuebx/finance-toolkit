@@ -1,17 +1,8 @@
 """
 Currency Exchange Rate Tracker
-================================
 Fetches live and historical EUR/USD exchange rates from a free public API,
 tracks trends over time, calculates key statistics, and lets you convert
 between currencies using the latest available rate.
-
-This is your first project that connects to the INTERNET to pull real data.
-That's done using the 'requests' library — Python's tool for talking to APIs.
-
-What is an API?
-    An API (Application Programming Interface) is a way for your code to
-    ask a server for data. We send a request to a URL, and the server
-    sends back data in JSON format (like a Python dictionary).
 
 Libraries:
 - requests:    fetching live data from the internet
