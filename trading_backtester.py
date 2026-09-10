@@ -1,12 +1,8 @@
 """
 Algorithmic Trading Backtester
-================================
 Downloads real historical stock price data, implements a Moving Average
-Crossover trading strategy, and backtests it — measuring how much money
+Crossover trading strategy, and backtests it  measuring how much money
 the strategy would have made or lost historically.
-
-This is what quantitative analysts (quants) do professionally:
-test trading ideas against historical data before risking real money.
 
 THE STRATEGY — Moving Average Crossover:
     - Calculate a FAST moving average (20 days) and SLOW moving average (50 days)
