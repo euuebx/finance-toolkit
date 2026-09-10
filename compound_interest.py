@@ -1,7 +1,5 @@
 """
-Compound Interest Visualizer
-=============================
-Compares multiple investment scenarios side by side — showing how
+Compares multiple investment scenarios side by side showing how
 starting amount, regular contributions, interest rate, and time
 interact to grow wealth over time.
 
