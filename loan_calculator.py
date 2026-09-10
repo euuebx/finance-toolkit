@@ -1,6 +1,5 @@
 """
 Loan & Mortgage Calculator
-==========================
 Calculates monthly repayments, total interest paid, and produces
 an amortization schedule showing how each payment is split between
 principal and interest over the life of the loan.
