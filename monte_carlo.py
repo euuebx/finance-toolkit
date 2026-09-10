@@ -1,14 +1,11 @@
 """
-Monte Carlo Portfolio Simulation
-==================================
 Simulates thousands of possible portfolio outcomes using random sampling.
 Instead of predicting ONE future, we model THOUSANDS of possible futures
 based on historical market behaviour (average return + volatility).
 
-The result: a probability distribution of outcomes — showing best case,
+The result: a probability distribution of outcomes showing best case,
 worst case, and the most likely range for a given investment.
 
-This technique is used by banks, hedge funds, and risk analysts daily.
 
 Libraries:
 - numpy:      fast random number generation and maths
