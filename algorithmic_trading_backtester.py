@@ -32,9 +32,13 @@ def make_signals(data):
     data["MA50"] = data["Price"].rolling(50).mean()
 
     # 1 means we are holding the stock, 0 means we are in cash
-   raw = np.where(data["MA20"] > data["MA50"], 1, 0)
-data["Position"] = pd.Series(raw, index=data.index).shift(1).fillna(0)
-data["Signal"] = data["Position"].diff()
+    # shift(1) delays the trade by one day, because the crossover
+    # is only known after the close (removes look-ahead bias)
+    raw = np.where(data["MA20"] > data["MA50"], 1, 0)
+    data["Position"] = pd.Series(raw, index=data.index).shift(1).fillna(0)
+
+    # A change from 0 -> 1 is a buy, 1 -> 0 is a sell
+    data["Signal"] = data["Position"].diff()
 
     return data.dropna()
 
@@ -157,16 +161,24 @@ def main():
     end = input("End date (YYYY-MM-DD): ").strip()
 
     try:
-        starting_money = float(input("Starting capital (€): "))
+        starting_money = float(input("Starting capital ($): "))
     except ValueError:
         print("Please enter a valid amount of money.")
         return
 
     print("\nDownloading data...")
-    data = get_data(ticker, start, end)
+    try:
+        data = get_data(ticker, start, end)
+    except Exception as error:
+        print(f"Could not get data: {error}")
+        return
 
     print("Creating signals...")
     data = make_signals(data)
+
+    if data.empty:
+        print("Not enough data. Use a longer date range (at least 50 days).")
+        return
 
     print("Running backtest...")
     data, trades = backtest(data, starting_money)
