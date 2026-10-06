@@ -32,10 +32,9 @@ def make_signals(data):
     data["MA50"] = data["Price"].rolling(50).mean()
 
     # 1 means we are holding the stock, 0 means we are in cash
-    data["Position"] = np.where(data["MA20"] > data["MA50"], 1, 0)
-
-    # A change from 0 -> 1 is a buy, 1 -> 0 is a sell
-    data["Signal"] = data["Position"].diff()
+   raw = np.where(data["MA20"] > data["MA50"], 1, 0)
+data["Position"] = pd.Series(raw, index=data.index).shift(1).fillna(0)
+data["Signal"] = data["Position"].diff()
 
     return data.dropna()
 
