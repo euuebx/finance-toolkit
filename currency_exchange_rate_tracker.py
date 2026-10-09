@@ -155,11 +155,11 @@ def main():
     base = "EUR"
     target = "USD"
 
-       try:
-           latest = get_latest_rate(base, target)
-       except requests.RequestException:
-           print("Could not reach the exchange rate API.")
-           return
+    try:
+        latest = get_latest_rate(base, target)
+    except requests.RequestException:
+        print("Could not reach the exchange rate API.")
+        return
 
     print(
         f"\nLatest rate ({latest['date']}): "
@@ -173,9 +173,10 @@ def main():
     except ValueError:
         print("Please enter valid numbers.")
         return
-               if days < 1:
-           print("Days must be at least 1.")
-           return
+
+    if days < 1:
+        print("Days must be at least 1.")
+        return
 
     convert(amount, latest["rate"], base, target)
 
