@@ -109,7 +109,7 @@ def plot_balance_over_time(df: pd.DataFrame, principal: float, annual_rate: floa
 
     plt.tight_layout()
     plt.savefig("balance_over_time.png", dpi=150)
-    plt.show()
+    plt.close(fig)
     print("  ✔ Saved: balance_over_time.png")
 
 
@@ -137,7 +137,7 @@ def plot_payment_breakdown(df: pd.DataFrame, principal: float, annual_rate: floa
 
     plt.tight_layout()
     plt.savefig("payment_breakdown.png", dpi=150)
-    plt.show()
+    plt.close(fig)
     print("  ✔ Saved: payment_breakdown.png")
 
 
@@ -149,7 +149,7 @@ def plot_pie_summary(summary: dict):
     explode = (0.03, 0.03)
 
     fig, ax = plt.subplots(figsize=(6, 6))
-    wedges, texts, autotexts = ax.pie(
+    ax.pie(
         sizes, labels=labels, colors=colors, explode=explode,
         autopct="%1.1f%%", startangle=90, textprops={"fontsize": 12}
     )
@@ -157,11 +157,25 @@ def plot_pie_summary(summary: dict):
 
     plt.tight_layout()
     plt.savefig("cost_breakdown.png", dpi=150)
-    plt.show()
+    plt.close(fig)
     print("  ✔ Saved: cost_breakdown.png")
 
 
 # ── 5. MAIN ──────────────────────────────────────────────────────────────────
+
+def read_number(prompt: str, cast=float, minimum: float = 0):
+    """Keep asking until the user enters a valid number >= minimum."""
+    while True:
+        try:
+            value = cast(input(prompt))
+        except ValueError:
+            print("  Please enter a number.")
+            continue
+        if value < minimum:
+            print(f"  Must be at least {minimum}.")
+            continue
+        return value
+
 
 def main():
     print("=" * 50)
@@ -169,9 +183,9 @@ def main():
     print("=" * 50)
 
     # ── Get inputs from the user ──
-    principal   = float(input("\nLoan amount (€): "))
-    annual_rate = float(input("Annual interest rate (%): "))
-    years       = int(input("Loan term (years): "))
+    principal   = read_number("\nLoan amount (€): ", minimum=1)
+    annual_rate = read_number("Annual interest rate (%): ")
+    years       = read_number("Loan term (years): ", cast=int, minimum=1)
 
     # ── Calculate everything ──
     summary = loan_summary(principal, annual_rate, years)
