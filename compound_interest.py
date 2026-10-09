@@ -15,7 +15,7 @@ Libraries used:
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import pandas as pd
-import numpy as np
+import re
 
 
 # ── 1. CORE FORMULA ──────────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ def compound_growth(
     Returns:
         DataFrame with year-by-year breakdown
     """
-    r = annual_rate / 100 / compounds_per_year  # rate per compounding period
+    r = (1+ annual_rate / 100 / compounds_per_year) ** (compounds_per_year / 12) - 1   # rate per compounding period
     records = []
 
     balance = principal
@@ -93,7 +93,7 @@ def compare_scenarios(scenarios: list[dict], years: int) -> dict[str, pd.DataFra
 
 # ── 3. VISUALISATIONS ────────────────────────────────────────────────────────
 
-COLOURS = ["#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED"]
+  COLOURS = ["#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED", "#0891B2"]
 
 
 def plot_growth_comparison(results: dict, years: int):
@@ -120,7 +120,7 @@ def plot_growth_comparison(results: dict, years: int):
 
     plt.tight_layout()
     plt.savefig("growth_comparison.png", dpi=150)
-    plt.show()
+    plt.close()
     print("  ✔ Saved: growth_comparison.png")
 
 
@@ -149,10 +149,10 @@ def plot_stacked_breakdown(label: str, df: pd.DataFrame):
     ax.legend(loc="upper left", fontsize=10)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
 
-    filename = f"breakdown_{label.replace(' ', '_').lower()}.png"
+    filename = f"breakdown_{re.sub(r'[^A-Za-z0-9]+', '_', label).strip('_').lower()}.png"
     plt.tight_layout()
     plt.savefig(filename, dpi=150)
-    plt.show()
+    plt.close()
     print(f"  ✔ Saved: {filename}")
 
 
@@ -187,7 +187,7 @@ def plot_rate_sensitivity(principal: float, monthly_contribution: float, years: 
 
     plt.tight_layout()
     plt.savefig("rate_sensitivity.png", dpi=150)
-    plt.show()
+    plt.close()
     print("  ✔ Saved: rate_sensitivity.png")
 
 
@@ -232,6 +232,13 @@ def main():
             "monthly_contribution": monthly_contribution,
         },
     ]
+    
+      seen, unique = set(), []
+      for s in scenarios:
+          if s["label"] not in seen:
+              seen.add(s["label"])
+              unique.append(s)
+      scenarios = unique
 
     print(f"\nRunning {len(scenarios)} scenarios over {years} years...\n")
 
@@ -249,11 +256,7 @@ def main():
 
     # ── Generate charts ──
     print("\n  Generating charts...")
-    plot_growth_comparison(results, years)
-
-    # Detailed breakdown for the most interesting scenario
-    best_label = list(results.keys())[-1]
-    plot_stacked_breakdown(best_label, results[best_label])
+    plot_rate_sensitivity(principal, monthly_contribution, years)
 
     # Rate sensitivity for base case
     plot_rate_sensitivity(
