@@ -254,16 +254,14 @@ def main():
         print(f"  {label:<35} €{final:>13,.2f}")
     print("─" * 55)
 
-    # ── Generate charts ──
-    print("\n  Generating charts...")
-    plot_rate_sensitivity(principal, monthly_contribution, years)
+         # ── Generate charts ──
+      print("\n  Generating charts...")
+      plot_growth_comparison(results, years)
 
-    # Rate sensitivity for base case
-    plot_rate_sensitivity(
-        principal=5_000,
-        monthly_contribution=200,
-        years=years,
-    )
+      best_label = list(results.keys())[-1]
+      plot_stacked_breakdown(best_label, results[best_label])
+
+      plot_rate_sensitivity(principal, monthly_contribution, years)
 
     print("\n✅ Done! All charts saved to your project folder.\n")
 
