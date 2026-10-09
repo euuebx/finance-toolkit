@@ -93,7 +93,8 @@ def compare_scenarios(scenarios: list[dict], years: int) -> dict[str, pd.DataFra
 
 # ── 3. VISUALISATIONS ────────────────────────────────────────────────────────
 
-  COLOURS = ["#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED", "#0891B2"]
+
+COLOURS = ["#2563EB","#16A34A","#DC2626","#D97706","#7C3AED","#0891B2"]
 
 
 def plot_growth_comparison(results: dict, years: int):
@@ -233,12 +234,12 @@ def main():
         },
     ]
     
-      seen, unique = set(), []
-      for s in scenarios:
-          if s["label"] not in seen:
-              seen.add(s["label"])
-              unique.append(s)
-      scenarios = unique
+    seen, unique = set(), []
+    for s in scenarios:
+        if s["label"] not in seen:
+            seen.add(s["label"])
+            unique.append(s)
+    scenarios = unique
 
     print(f"\nRunning {len(scenarios)} scenarios over {years} years...\n")
 
@@ -254,14 +255,14 @@ def main():
         print(f"  {label:<35} €{final:>13,.2f}")
     print("─" * 55)
 
-         # ── Generate charts ──
-      print("\n  Generating charts...")
-      plot_growth_comparison(results, years)
+    # ── Generate charts ──
+    print("\n  Generating charts...")
+    plot_growth_comparison(results, years)
 
-      best_label = list(results.keys())[-1]
-      plot_stacked_breakdown(best_label, results[best_label])
+    best_label = list(results.keys())[-1]
+    plot_stacked_breakdown(best_label, results[best_label])
 
-      plot_rate_sensitivity(principal, monthly_contribution, years)
+    plot_rate_sensitivity(principal, monthly_contribution, years)
 
     print("\n✅ Done! All charts saved to your project folder.\n")
 
