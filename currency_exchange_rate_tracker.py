@@ -106,7 +106,7 @@ def plot_history(df, base, target):
     plt.tight_layout()
 
     plt.savefig("rate_history.png", dpi=150)
-    plt.show()
+    plt.close()
 
 
 # Show how the rates are distributed
@@ -127,7 +127,7 @@ def plot_distribution(df):
     plt.tight_layout()
 
     plt.savefig("rate_distribution.png", dpi=150)
-    plt.show()
+    plt.close()
 
 
 # Show the change in the exchange rate each day
@@ -145,7 +145,7 @@ def plot_daily_changes(df):
     plt.tight_layout()
 
     plt.savefig("daily_changes.png", dpi=150)
-    plt.show()
+    plt.close()
 
 
 def main():
@@ -155,7 +155,11 @@ def main():
     base = "EUR"
     target = "USD"
 
-    latest = get_latest_rate(base, target)
+       try:
+           latest = get_latest_rate(base, target)
+       except requests.RequestException:
+           print("Could not reach the exchange rate API.")
+           return
 
     print(
         f"\nLatest rate ({latest['date']}): "
@@ -169,6 +173,9 @@ def main():
     except ValueError:
         print("Please enter valid numbers.")
         return
+               if days < 1:
+           print("Days must be at least 1.")
+           return
 
     convert(amount, latest["rate"], base, target)
 
